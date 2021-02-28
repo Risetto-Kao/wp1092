@@ -1,0 +1,39 @@
+body{
+    margin: auto;
+    padding: auto;
+}
+#background{
+    height: 100%;
+    width: 100%;
+    position: absolute;
+    color: rgb(14, 204, 87);
+    border: 1px;
+}
+
+#img{
+    height: 200px;
+    width: 200px;
+    align-self: flex-end;
+
+}
+#title{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: black;
+    background-color: grey;
+    background-image: url("https://cyberisland.teldap.tw/S/qAttzESSjwpXouNeYjSFtNlySqj");
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-size: cover;
+
+    /* text-align: center; */
+    height: 100px;
+    line-height: 100%;
+}
+.container{
+    margin: 100px;
+    width: 100px;
+    border: 2px;
+    border-radius: 20;
+}
