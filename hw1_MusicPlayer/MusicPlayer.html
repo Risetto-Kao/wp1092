@@ -12,27 +12,25 @@
 
 <body>
     <div id="title"><span class="text">Music Player</span></div>
-    <section id="background">
-    <section style="text-align: center;">
-        <div>
-            <!-- <div class="container">今天天氣</div> -->
-            <img id="img" src="https://cyberisland.teldap.tw/S/JQjOlVLtNMlgyzySsltwmTSldP">
-        </div>
-        <div style="margin: 50px;font-size: 30px;">Music.mp3</div>
-        <div style="text-align: center;">
-            <ul>
+    <div id="background">
+        <div id="player">
+            <div><i class="fa fa-music fa-4x" style="color: white;margin: 20 ;"></i></div>
+            <div id="song_name">Music.mp3</div>
+            <hr color="white" size="5px">
+
+            <ul id="button-list">
                 <button class="btn"><i class="fa fa-step-backward fa-2x"></i></button>
                 <button class="btn"><i class="fa fa-play fa-2x"></i></button>
                 <button class="btn"><i class="fa fa-step-forward fa-2x"></i></button>
                 <!-- fa fa-stop -->
                 <!-- fas fa-volume-up -->
             </ul>
+
+            <div id="music_progress">
+
+            </div>
         </div>
-        <div >
-            <progress max="100" value="1"></progress>
-        </div>
-    </section>
-</section>
+    </div>
 
 </body>
 

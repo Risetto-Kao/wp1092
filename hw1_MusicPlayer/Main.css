@@ -1,54 +1,84 @@
-body{
+body {
     margin: auto;
     padding: auto;
 }
-#background{
 
+#background {
+    /* background-image: url(https://a-static.besthdwallpaper.com/starry-sky-view-qiangzhi-tw-31997_L.jpg); */
     position: absolute;
-    background-color: aqua;
+    background-color: black;
     border: 1px;
+    width: 100%;
+    height: 90%;
+    background-size: cover;
+    background-repeat: no-repeat;
 }
 
-img{
-    height: 350px;
-    width: 350px;
-    border: 2px solid white;
-}
-#title{
+#title {
     display: flex;
     align-items: center;
     justify-content: center;
-    color: black;
-    background-image: url("https://cyberisland.teldap.tw/S/qAttzESSjwpXouNeYjSFtNlySqj");
-    background-repeat: no-repeat;
-    background-attachment: fixed;
-    background-size: cover;
-    size: 200px;
-    /* text-align: center; */
-    height: 100px;
+    background-color: aqua;
+    height: 10%;
     line-height: 100%;
+    border: 2px solid;
 }
-.container{
+
+.container {
     margin: 100px;
     width: 100px;
     border: 2px;
     border-radius: 20;
 }
 
-.text{
+.text {
     font-size: 20px;
 }
 
-button{
-border-radius: 50%;
+#button-list {
+    margin: 5%;
+    padding: 2%;
+    justify-content: space-evenly;
+    display: inline;
+}
+
+button {
+    border-radius: 50%;
     width: 50px;
     height: 50px;
     background-color: grey;
-    align-items: center;
+    /* align-items: center; */
     border: 1px solid;
-    margin-right: 15px;
+    /* margin-right: 15px; */
 }
 
-.btn:hover{
-    background-color: blueviolet;
+.btn:hover {
+    background-color: aqua;
+}
+
+#player {
+    width: 300px;
+    height: 300px;
+    text-align: center;
+    border: 5px solid white;
+    border-radius: 10px;
+    background-color: transparent;
+    margin: auto;
+    margin-top: 15%;
+}
+
+#song_name {
+    color: white;
+    margin: 10px;
+    font-size: 30px;
+    text-align: center;
+}
+
+#music_progress {
+    color: white;
+    border: 3px solid white;
+    border-radius: 10px;
+    width: 180px;
+    margin: auto;
+    padding: 2%;
 }
