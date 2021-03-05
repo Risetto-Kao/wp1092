@@ -1,27 +1,49 @@
+@charset "utf-8";
+html {
+    background: url(https://2.bp.blogspot.com/-H3JXh2cIKHs/WuwLvnz19cI/AAAAAAAAMXs/-qySdr5zEcc-kcLC4arf5m5H3F_trN7sgCK4BGAYYCw/s1600/kristopher-roller-110203-unsplash-m.jpg)no-repeat center center fixed;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+    /* opacity: 0.5; */
+}
+
 body {
-    margin: auto;
-    padding: auto;
+    height: 100%;
+    width: 100%;
+}
+
+progress::-webkit-progress-value {
+    background: white;
+}
+
+progress {
+    font-size: .6em;
+    border: 3px solid white;
+    border-radius: 20px;
+    width: 60%;
 }
 
 #background {
-    /* background-image: url(https://a-static.besthdwallpaper.com/starry-sky-view-qiangzhi-tw-31997_L.jpg); */
+    /* background-image: url(https://2.bp.blogspot.com/-H3JXh2cIKHs/WuwLvnz19cI/AAAAAAAAMXs/-qySdr5zEcc-kcLC4arf5m5H3F_trN7sgCK4BGAYYCw/s1600/kristopher-roller-110203-unsplash-m.jpg); */
     position: absolute;
-    background-color: black;
-    border: 1px;
+    /* background-color: black; */
+    /* border: 1px; */
     width: 100%;
-    height: 90%;
-    background-size: cover;
+    height: 100%;
+    background-size: contain;
     background-repeat: no-repeat;
+    background-position: center;
 }
 
 #title {
     display: flex;
     align-items: center;
     justify-content: center;
-    background-color: aqua;
+    background-color: transparent;
     height: 10%;
     line-height: 100%;
-    border: 2px solid;
+    /* border: 2px solid; */
 }
 
 .container {
@@ -36,7 +58,7 @@ body {
 }
 
 #button-list {
-    margin: 5%;
+    margin: 15%;
     padding: 2%;
     justify-content: space-evenly;
     display: inline;
@@ -46,14 +68,15 @@ button {
     border-radius: 50%;
     width: 50px;
     height: 50px;
-    background-color: grey;
+    background-color: white;
     /* align-items: center; */
-    border: 1px solid;
+    border: 1px solid white;
     /* margin-right: 15px; */
 }
 
 .btn:hover {
-    background-color: aqua;
+    background-color: grey;
+    border: 1px solid grey;
 }
 
 #player {
@@ -72,13 +95,4 @@ button {
     margin: 10px;
     font-size: 30px;
     text-align: center;
-}
-
-#music_progress {
-    color: white;
-    border: 3px solid white;
-    border-radius: 10px;
-    width: 180px;
-    margin: auto;
-    padding: 2%;
 }
