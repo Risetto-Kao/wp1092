@@ -1,0 +1,234 @@
+html{
+    height:100%;/*給.body抓高度*/
+
+}
+body{
+    padding:0;
+    margin:0;
+    font-family: 'Lato', sans-serif !important;
+    height:100%; /*給.main抓高度*/
+    
+
+}
+.main{
+    background-image: url(image/background.jpg);
+    display:flex;
+    justify-content:center; /*水平方向*/
+    align-items:center;
+    height:100%;  /*要做垂直置中需要給容器一個高度，但要注意的是如果只有這邊設100%是不夠的，容器的父元素也需要有高度這裡才抓地到高度*/
+    width:100%;
+    background-size: 100% 100%;        
+    
+    
+}
+    .player {
+        flex:none;
+        background: #bbbb1b;
+        height: 200px;
+        position: relative;
+        width: 50%;
+        box-shadow: 0px 0px 16px 0px #134861;
+        border-radius: 4px;
+        display:flex;
+        justify-content:flex-start; /*水平方向*/
+    
+    }
+
+    .pic {
+        background-image:url(image/pic.jpg);
+        background-size:300px,100px;
+        height: 100%;
+        width: 60%;
+        border-radius: 4px;      
+    } 
+    
+    .panel{
+        height:100%;
+        width:80%;
+
+
+    }
+    
+    .up{
+        width:100%;
+        height:70%;
+        display:flex;
+        background-color:rgb(40,65,93);
+
+    }
+
+    .down{
+        width:100%;
+        height:30%;
+        background-color:rgb(54, 78, 106);
+    }
+
+    .title, .artist {
+        font-family: verdana;
+        left: 300px;
+        position: absolute;
+    }
+    .title {
+        color: #FFFFFF;
+        font-size: 24px;
+        font-weight: bold;
+        top: 20px;
+    }
+    .artist {
+        color: rgb(180,193,225);
+        font-size: 14px;
+        top: 50px;
+    }
+
+    
+    .progress-bar { 
+        position:absolute;
+        top:100px;
+        left: 300px;
+        width : 60%;}
+    /* 整條progress */
+    #all-progress { width : 80%; 
+                    border-radius : 2px; 
+                    height : 4px; 
+                    background-color:rgb(27,46,67);
+                    overflow : visible;}
+    /* 已播放progress */
+    #current-progress { width : 50%; 
+                        border-radius : 2px; 
+                        height : 4px; 
+                        background-color : rgb(106,110,163);}
+    /* 拖放 */
+    #progress-button { width: 10px;
+                       height: 10px;
+                       display: block;
+                       background-color:rgb(212,214,240);
+                       border-radius: 5px; 
+                       position: relative;
+                       top:-3px; 
+                       float: right;}
+
+    .control {
+             
+             position:absolute;
+             color: #FFFFFF;
+             font-size: 12px;
+             top: 140px;
+             display:flex;
+             width:250px;
+             height:50px;                   
+             }
+                    
+    .control .rew{
+             background-image:url(image/prev.png);
+             position:absolute;
+             left:40px;
+             top:10px;
+             width:32px;
+             height:32px;            
+             }
+                
+    .control .play{
+             background-image:url(image/play.png);
+             background-size: 32px 32px;
+             position:absolute;
+             top:10px;
+             left:110px;
+             width:32px;
+             height:32px;
+             }
+                
+    .control .fwd{
+             background-image:url(image/next.png);
+             position:absolute;
+             top:10px;
+             left:180px;
+             width:32px;
+             height:32px;
+             }
+
+    .volume-icon{
+            background-image:url(image/technology.png);
+            width:24px;
+            height:24px;
+            position:absolute;
+            top:155px;
+            left:520px;
+    }
+
+    .share{
+        background-image:url(image/sharing.png);
+        background-size: 32px 32px;
+        width:32px;
+        height:32px;
+        position:absolute;
+        top:40px;
+        left:540px;
+    }
+    .like{
+        background-image:url(image/heart.png);
+        background-size: 32px 32px;
+        width:32px;
+        height:32px;
+        position:absolute;
+        top:40px;
+        left:580px;
+    }
+
+
+
+
+    .volume-bar { 
+        position:absolute;
+        top:165px;
+        width : 15%;
+        left :550px;
+    }
+    /* 整條volume */
+    #all-volume { width : 80%; 
+                    border-radius : 2px; 
+                    height : 4px; 
+                    background-color:rgb(27,46,67);
+                    overflow : visible;}
+    /*目前volume*/
+    #current-volume { width : 50%; 
+                        border-radius : 2px; 
+                        height : 4px; 
+                        background-color :rgb(106,110,163);}
+    /*volume 按鈕*/
+    #volume-button { width: 10px;
+                       height: 10px;
+                       display: block;
+                       background-color:rgb(212,214,240);
+                       border-radius: 5px; 
+                       position: relative;
+                       top:-3px; 
+                       float: right;}
+
+
+    .current_time { 
+                position:absolute;
+                color: #FFFFFF;
+                font-size: 12px;
+                top: 80px;
+                display:flex;
+                width:250px;
+                height:50px;    
+                left:89%;
+
+            }
+
+    .total_time { 
+                position:absolute;
+                color: rgb(180,193,225);
+                font-size: 12px;
+                top: 80px;
+                left:94%;
+                display:flex;
+                width:250px;
+                height:50px;                   
+            }
+    
+
+      
+    
+   

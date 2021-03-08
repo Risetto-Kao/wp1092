@@ -1,0 +1,83 @@
+body {
+    margin: 0;
+    font-family: 'Lato', sans-serif;
+    background-color: black;
+}
+
+a {
+    text-decoration: none;
+}
+
+.column {
+    background-color: black;
+    margin-left: max(15em, 25%);
+    margin-right: max(15em, 25%);
+}
+
+#album-artwork {
+    padding-top: 1em;
+    width: 100%;
+    margin: auto;
+    padding-bottom: 1em;
+}
+
+#song-name {
+    color: white;
+    font-weight: bolder;
+    font-size: 2.5em;
+}
+
+#artist-name {
+    color: grey;
+    font-weight: bold;
+    font-size: 2em;
+}
+
+@keyframes loader {
+
+	0% {
+		width: 0;
+	}
+	100% {
+		width: 100%;
+	}
+
+}
+
+.progress-bar {
+    padding-top: 1em;
+    padding-bottom: 1em;
+	border-radius: 60px;
+	overflow: hidden;
+    width: 100%;
+}
+
+.progress-bar span {
+    display: block;
+}
+
+.bar {
+    background: yellow;
+    /* background: rgba(231, 231, 231, 0.075); */
+}
+
+.progress {
+    animation: loader 212s ease;
+    background: #1db954;
+    color: #fff;
+    padding: 5px;
+    width: 0;
+}
+
+.player-control {
+    height: 5em;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 10px;
+    justify-items: center;
+}
+
+#play-back, #play-pause, #fast-forward {
+    filter: invert(1);
+    height: 4em;
+}
