@@ -10,21 +10,22 @@ cancel.onclick = function () {
   inputComment.value = '';
   buttonGroup.style.visibility = 'hidden';
 }
-inputComment.onkeypress = function(){
-    getIsEmpty();
+inputComment.oninput = function(){
     leave.style.backgroundColor = '#065fd4';
+    if (inputComment.value.trim() == ''){
+    leave.style.backgroundColor = '#cccccc';}
 }   
-getIsEmpty = function(value){
-    if (value == ''){
-        leave.style.backgroundColor = '#cccccc'
-    }
-}
+
 inputComment.onfocus = function(){
     buttonGroup.style.visibility = 'visible';
 } 
-
+inputComment.onblur = function(){
+    if (inputComment.value == ''){
+    leave.style.backgroundColor = '#cccccc';}
+}
 leave.onclick = function(){
     let inputText = inputComment.value;
+    inputText.trim();
     const imageResource = 'images/user-icon.jpg';
     const name = 'Toby Chen';
     let time = new Date();
