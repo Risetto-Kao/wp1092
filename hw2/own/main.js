@@ -6,6 +6,7 @@ let displayJson = {
             'image': 'images/page1.jpeg',
             'backId': 'start',
             'nextId': '1-2'
+            
         },
         {
             'id': '1-2',
