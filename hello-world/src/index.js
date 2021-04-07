@@ -3,41 +3,14 @@ import ReactDOM from 'react-dom';
 import './index.css';
 // import App from './App';
 import reportWebVitals from './reportWebVitals';
-import ScoreCard from './App';
+import Counter from './App';
 
 
 
-const columnIndex = ['Subject', 'score'];
-const scoreCard = {
-  name: 'Max',
-  records: [
-    ['Math', 100],
-    ['Chinese', 87],
-    ['English', 100],
-    ['Science', 100],
-    ['Social', 0]
-  ]
-}
 
-class Clock extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = { date: new Date() };
-  }
-  render() {
-    return (
-      <div>
-        <h1>Hi</h1>
-        <h2>It is{this.state.date.toLocaleTimeString()}.</h2>
-      </div>
-    );
-  }
-}
+ReactDOM.render(<Counter/>,
+  document.getElementById('root'));
 
-
-setInterval(()=>ReactDOM.render(<Clock />,
-  document.getElementById('root')),1000);
-  
 // ReactDOM.render(<Clock />,
 //   document.getElementById('root'));
 
