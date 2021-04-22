@@ -1,7 +1,7 @@
 import React from "react";
 
 function Header(){
-    return <header>123</header>
+    return <header>Google Sheet Clone</header>
 }
 
 export default Header

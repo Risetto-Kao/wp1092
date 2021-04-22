@@ -1,0 +1,39 @@
+
+
+
+.show-cell {
+    height: 30px;
+    width: 100px;
+    background-color: #CDC1B4;
+ 
+}
+
+/* .input-cell :focus{
+    border: blue 2px solid;
+
+}
+.show-cell :focus{
+    border: blue 2px solid;
+} */
+
+.input-cell{
+    height: 30px;
+    width: 100px;
+    background-color: #CDC1B4;
+}
+
+.fixed-cell{
+    height: 30px;
+    width: 100px;
+    background-color: yellowgreen;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: none;
+}
+
+header{
+    text-align: center;
+    font-size: larger;
+    background-color: burlywood;
+}
