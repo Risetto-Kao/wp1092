@@ -33,6 +33,27 @@ if (isProduction) {
   })
 }
 
+// log file
+const fs = require('fs')
+const date = require('date-and-time')
+let now = new Date()
+now = date.format(now,'YYYY-MM-DD-HH-mm-ss')
+const serverUpTime = now.toString()
+
+
 app.listen(port, () => {
   console.log(`Server is up on port ${port}.`)
+
+  // record timestamp
+
+  console.log(`${serverUpTime}`)
+  fs.writeFile(
+    `server/log/${serverUpTime}.log`,
+    `[${serverUpTime}] Server on\n`,
+    (error)=>{
+      console.log(`When writing to log, error happened: ${error}`)
+  })
 })
+
+export {serverUpTime}
+

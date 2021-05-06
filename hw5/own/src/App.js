@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import './App.css'
 import { guess, startGame, restart } from './axios'
 
@@ -7,6 +7,7 @@ function App() {
   const [hasWon, setHasWon] = useState(false)
   const [number, setNumber] = useState('')
   const [status, setStatus] = useState('')
+
 
   const handleStart = async () => {
     await startGame()

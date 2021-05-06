@@ -8,6 +8,7 @@
     "@testing-library/user-event": "^12.8.3",
     "axios": "^0.21.1",
     "cors": "^2.8.5",
+    "date-and-time": "^1.0.0",
     "express": "^4.17.1",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
@@ -19,7 +20,7 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "server": "nodemon", 
+    "server": "nodemon",
     "eject": "react-scripts eject",
     "devstart": "nodemon ./bin/www"
   },

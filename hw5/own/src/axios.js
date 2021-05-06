@@ -1,19 +1,26 @@
 import axios from 'axios'
 
 const instance = axios.create({ baseURL: 'http://localhost:4000/api/guess' })
-
+const netWorkErrorMessage =`Error: There's some problem with net connection.`
+const otherErrorMessage = `Error: There's some problem not defined, try to connect the author.` 
 const startGame = async () => {
-  const {
-    data: { msg }
-  } = await instance.post('/start')
+  try {
+    const {
+      data: { msg }
+    } = await instance.post('/start')
+  
+    return msg
+  } catch (error) {
+    return netWorkErrorMessage
+  }
 
-  return msg
 }
 
 const guess = async (number) => {
   // TODO: Change this to catch error
   // The error message should be: Error: "xx" is not a valid number (1 - 100)
-  const errorMessage = `Error: ${number} is not a valid number (1 - 100)`
+  const errorMessage = `Error: ${number} is not a valid number. (1 - 100)`
+
   // let re =  /^[0-9] .?[0-9]*/ ;
   let isValid = false;
   let re = /\d*/
@@ -28,7 +35,9 @@ const guess = async (number) => {
     console.log({data:msg})
     return msg
   } catch (error) {
-    console.log('Error in axios is: '+error)
+    console.log('Error in axios is: '+error);
+    if (error.message === "Network Error") return netWorkErrorMessage
+    if (error) return otherErrorMessage
     return errorMessage
   }
 }
@@ -36,11 +45,16 @@ const guess = async (number) => {
 
 
 const restart = async () => {
-  const {
-    data: { msg }
-  } = await instance.post('/restart')
-
-  return msg
+  try {
+    const {
+      data: { msg }
+    } = await instance.post('/restart')
+  
+    return msg
+  } catch (error) {
+    return netWorkErrorMessage
+  }
+  
 }
 
 export { startGame, guess, restart }
