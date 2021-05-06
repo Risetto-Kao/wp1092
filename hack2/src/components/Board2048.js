@@ -11,7 +11,8 @@ export default function Board2048 ({ board }) {
         <>
         <table className={boardClassName} id="board-full">
             <tbody>
-                {board.map((row_vector, row_idx) => (<Row key={row_idx} row_value={row_vector} />))}
+            {board.map((row_vector, row_idx) => (<Row key={row_idx} row_idx={row_idx} row_value={row_vector} />))}
+                {/* {board.map((row_vector, row_idx) => (<Row key={row_idx} row_value={row_vector} />))} */}
             </tbody>
         </table>
         <div className={infoClassName} id="game-over-info">

@@ -1,0 +1,13 @@
+{
+  "name": "01.express-http",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "scripts": {
+    "start": "cd frontend && yarn start",
+    "server": "cd backend && yarn server"
+  },
+  "dependencies": {
+    "body-parser": "^1.19.0"
+  }
+}
