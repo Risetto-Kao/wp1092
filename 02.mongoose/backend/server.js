@@ -2,8 +2,11 @@ import mongoose from 'mongoose'
 import dotenv from 'dotenv-defaults'
 import User from './models/user.js'
 
-dotenv.config()
-mongoose.connect(process.env.MONGO_URL)
+dotenv.config();
+mongoose.connect(process.env.MONGO_URL,{
+    useNewUrlParser: true,
+    useUnifiedTopology:true
+});
 const saveUser = async (id, name) => {
     const existing = await User.findOne({name});
     if(existing) throw new Error(`data ${name} exists`);
