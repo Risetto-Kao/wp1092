@@ -26,9 +26,9 @@ function App() {
     }
   }
 
-  useEffect(()=>{
-    displayStatus(status)
-  },[status])
+  // useEffect(()=>{
+  //   displayStatus(status)
+  // },[status])
 
   const bodyRef = useRef(null)
 
