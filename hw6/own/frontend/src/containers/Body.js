@@ -54,6 +54,7 @@ const Body = () => {
   };
 
   const handleAdd = async () => {
+    console.log(`At handle add:\n--name=>${name}\n--subject=>${subject}\n--score=>${score}`);
     const {
       data: { message, card },
     } = await axios.post('/api/create-card', {

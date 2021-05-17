@@ -1,6 +1,7 @@
 import mongoose from 'mongoose';
 
 function connectMongo() {
+  // @ maybe the path has some problem
   mongoose.connect(process.env.MONGO_URL, {
     useNewUrlParser: true,
     useUnifiedTopology: true,

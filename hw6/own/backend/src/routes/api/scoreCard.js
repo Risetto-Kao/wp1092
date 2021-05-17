@@ -3,12 +3,43 @@ import ScoreCard from '../../models/ScoreCard';
 
 const router = Router();
 
+
+const isExisting = async (name) =>{
+  console.log('Checking: if name & subject is existing');
+  const existing = await ScoreCard.findOne({name});
+  return existing;
+}
+
 router.post('/create-card', async function (req, res) {
   try {
-    const { name, subject, score } = req.query;
+    const { name, subject, score } = req.body;
+    console.log(name,subject,score)
     console.log('at backend: create card');
-    console.log(req);
-    console.log(res);
+    console.log('------');
+
+    if (isExisting(name)) {
+      console.log(`Result: name(${name}) & subject(${subject}) is existing`);
+      // const newScoreCard = new ScoreCard({name,subject,score});
+      const filter = {name:name,subject:subject};
+      const update = {score:score};
+      ScoreCard.findOneAndUpdate(filter,update);
+
+      console.log('Update success at isExisting');
+      
+      const newScoreCard = new ScoreCard({name,subject,score});
+      const message = `Updating Name: ${name}, Subject: ${subject}, Score: ${score}`;
+      res.send({newScoreCard,message});
+    }
+    else {
+      console.log(`Result: name(${name}) & subject(${subject}) is not existing`);
+
+      const newScoreCard = new ScoreCard({name,subject,score});
+      newScoreCard.save();
+      console.log('Save success at isNotExisting');
+
+      const message = `Adding Name: ${Name}, Subject: ${Subject}, Score: ${Score}`;
+      res.send({newScoreCard,message});
+    }
     // TODO:
     // - Create card based on { name, subject, score } of req.xxx
     // - If {name, subject} exists,
