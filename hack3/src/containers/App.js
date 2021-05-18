@@ -26,16 +26,31 @@ function App() {
   const station_order = current_station_id.slice(1, current_station_id.length) // R10, station_order = 10
   const station_info = current_station_id[0] !== 'N' ? data[station_type][parseInt(station_order) - 1] : null // get certain station information
 
+  useEffect(() => {
+    getStations()
+
+  }, [])
+
   const getStations = async () => {
     // fetch data from database via backend
     // coding here ...
 
     // 可能要加config
-    const {
-      data: { message, data }
-    } = await instance.get('/getStations');
-    console.log(message)
-    return data;
+
+    try {
+      const {
+        data: { message, data }
+      } = await instance.get('/getStations');
+      console.log('message')
+      console.log(message)
+      setData(data)
+      console.log(data)
+      console.log(data.R)
+      console.log(data.G)
+    } catch (e) {
+      console.log('error at get stations')
+      throw Error(e)
+    }
   }
 
   const calculateDistance = async () => {
@@ -59,7 +74,7 @@ function App() {
       <div className="welcome-title"><h1>Welcome to MRT Distance Calculator !</h1></div>
       <div className="calculator-container">
         <div className="mode-selector">
-          
+
           <span id="start-station-span">起始站</span>
           <select id="start-select" className="start-station"> {/* you should add both onChange and value to attributes */}
             <option></option>
@@ -86,14 +101,17 @@ function App() {
         </div>
 
         <div className="route-graph-info-container">
-          <RouteGraph route_data={{getStations}} /> {/* you should pass data to child component with your own customized parameters */}
-          <RouteGraph route_data={{getStations}} /> {/* you should pass data to child component with your own customized parameters */}
+          <RouteGraph route_data={data.R} /> {/* you should pass data to child component with your own customized parameters */}
+          <RouteGraph route_data={data.G} /> {/* you should pass data to child component with your own customized parameters */}
           <StationInfo /> {/* you should pass data to child component with your own customized parameters */}
         </div>
-        
+
       </div>
     </div>
   )
 }
 
 export default App
+
+
+

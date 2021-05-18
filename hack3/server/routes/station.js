@@ -37,9 +37,10 @@ const tidyUpData = (data, result) => {
       }
     })
   })
-  result.keys((e)=>{
-    e.sort((a,b)=>a-b)
-  })
+  // result.keys((e)=>{
+  //   e.sort((a,b)=>a-b)
+  // })
+  console.log(result)
   return result
 }
 
@@ -104,6 +105,7 @@ const GetStations = async (req, res) => {
     // 找出所有資料 用mongoose.model.?去找
     // Station.find({})
     data = await Station.find({})
+    console.log(data);
     result = tidyUpData(data, result)
 
     if (Object.keys(result).length) {
