@@ -13,7 +13,7 @@ function RouteGraph(props) {
         // use <Station /> with your own customized parameters
         // coding here ...
         data.map((e)=>{
-          return (<Station station_id={e.station_id} line_id={e.station_type} key={e.station_id}/>)
+          return (<Station station_id={e.station_id} line_id={e.station_type} key={e.station_id} station_name={e.station_name}/>)
           }
         )
       }

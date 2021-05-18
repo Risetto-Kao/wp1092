@@ -101,8 +101,8 @@ function App() {
         </div>
 
         <div className="route-graph-info-container">
-          <RouteGraph route_data={data.R} /> {/* you should pass data to child component with your own customized parameters */}
-          <RouteGraph route_data={data.G} /> {/* you should pass data to child component with your own customized parameters */}
+          <RouteGraph route_data={data[Object.keys(data)[0]]} /> {/* you should pass data to child component with your own customized parameters */}
+          <RouteGraph route_data={data[Object.keys(data)[1]]} /> {/* you should pass data to child component with your own customized parameters */}
           <StationInfo /> {/* you should pass data to child component with your own customized parameters */}
         </div>
 
