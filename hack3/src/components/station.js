@@ -1,16 +1,19 @@
 import React from 'react'
 
 function Station(props) {
+  const station_id = props.station_id;
+  const line_id = props.line_id;
 
   return (
     <div className="station-line-container">
-      <div className="station-and-name" id={props.station_id} onClick={props.station_click}> {/* you should add both id and onClick to attributes */}
+      <div className="station-and-name" id={station_id} > {/* you should add both id and onClick to attributes */}
         <div className="station-rectangle"></div>
         <div className="station-name"></div>
       </div>
-      <div id={props.line_id} className="line"></div> {/* you should add both id to attributes */}
+      <div id={line_id} className="line"></div> {/* you should add both id to attributes */}
     </div>
   )
 }
 
 export default Station
+
