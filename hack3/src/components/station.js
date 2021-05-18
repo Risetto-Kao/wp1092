@@ -1,8 +1,8 @@
 import React from 'react'
 
 function Station(props) {
-  const station_id = props.station_id;
-  const line_id = props.line_id;
+  const station_id = 's-' + props.station_id;
+  const line_id = 'l-' + props.line_id;
 
   return (
     <div className="station-line-container">
