@@ -49,12 +49,13 @@ const Body = () => {
   const [queryType, setQueryType] = useState('name');
   const [queryString, setQueryString] = useState('');
 
+
   const handleChange = (func) => (event) => {
     func(event.target.value);
   };
 
   const handleAdd = async () => {
-    console.log(`At handle add:\n--name=>${name}\n--subject=>${subject}\n--score=>${score}`);
+    
     const {
       data: { message, card },
     } = await axios.post('/api/create-card', {
@@ -62,20 +63,36 @@ const Body = () => {
       subject,
       score,
     });
-
+    console.log(message)
     if (!card) addErrorMessage(message);
     else addCardMessage(message);
+    setInitialState();
   };
 
   const handleQuery = async () => {
     const {
       data: { messages, message },
-    } = await axios.get('/api/query-data') // TODO: axios.xxx call the right api
-
+    } = await axios.post('/api/query-data',{
+      queryString,
+      queryType
+    }) // TODO: axios.xxx call the right api
     if (!messages) addErrorMessage(message);
-    else addRegularMessage(...messages);
+    else {
+      const parsedMessages = JSON.parse(messages);
+      let showData = [];
+      parsedMessages.map((e)=>showData.push(`Name: ${e.name}, Subject: ${e.subject}, Score: ${e.score}`))
+      console.log(showData)
+      addRegularMessage(...showData);
+    }
+    setInitialState();
   };
 
+  const setInitialState = () => {
+    setQueryString('');
+    setName('');
+    setSubject('');
+  } 
+  
   return (
     <Wrapper>
       <Row>

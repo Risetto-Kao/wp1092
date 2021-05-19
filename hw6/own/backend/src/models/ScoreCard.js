@@ -13,9 +13,12 @@ const Schema = mongoose.Schema;
 const ScoreCardSchema = new Schema({
     name: String,
     subject: String,
-    score: Number
-})
-
+    score: Number,
+  
+}, {
+    collection: 'ScoreCard',
+    timestamps: { createdAt: 'created_at', updatedAt: 'updated_at' }
+  });
 const ScoreCard = mongoose.model('ScoreCard',ScoreCardSchema);
 
 export default ScoreCard;
