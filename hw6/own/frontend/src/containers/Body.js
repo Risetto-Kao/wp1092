@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Button from '@material-ui/core/Button';
 import FormControl from '@material-ui/core/FormControl';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
@@ -17,13 +17,16 @@ const Wrapper = styled.section`
   display: flex;
   flex-direction: column;
 `;
-
+// align-items: center;
+// justify-content: center;
 const Row = styled.div`
   display: flex;
-  align-items: center;
-  justify-content: center;
+
   width: 100%;
   padding: 1em;
+  & button {
+    margin-right: 3em;
+  }
 `;
 
 const StyledFormControl = styled(FormControl)`
@@ -49,13 +52,34 @@ const Body = () => {
   const [queryType, setQueryType] = useState('name');
   const [queryString, setQueryString] = useState('');
 
-
+  const [canGoToNext, setCanGoToNext] = useState(false);
+  const [queryDataLength, setQueryDataLength] = useState(0);
+  const [showDataLength, setShowDataLength] = useState('Data: - / -')
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const maxInOnePage = 3;
   const handleChange = (func) => (event) => {
     func(event.target.value);
   };
 
+  useEffect(() => {
+    if (queryDataLength === 0) {
+      setCanGoToNext(false);
+      setShowDataLength('Data: - / -');}
+    else if (queryDataLength === 1) {
+      setCanGoToNext(false)
+      setShowDataLength(`Data: 1 / 1`);}
+    else if (queryDataLength <= currentIndex + maxInOnePage) {
+      setCanGoToNext(false)
+      setShowDataLength(`Data: ${currentIndex + 1}~${queryDataLength} / ${queryDataLength}`);}
+    else if (queryDataLength > currentIndex + maxInOnePage){
+      setCanGoToNext(true)
+      setShowDataLength(`Data: ${currentIndex + 1}~${currentIndex + maxInOnePage} / ${queryDataLength}`);}
+  }, [currentIndex, queryDataLength])
+
+
+
   const handleAdd = async () => {
-    
+
     const {
       data: { message, card },
     } = await axios.post('/api/create-card', {
@@ -64,35 +88,72 @@ const Body = () => {
       score,
     });
     console.log(message)
-    if (!card) addErrorMessage(message);
+    if (!card) {
+      addErrorMessage(message); setShowDataLength('Data: - / -');
+    }
     else addCardMessage(message);
     setInitialState();
+    setQueryDataLength(0);
   };
 
   const handleQuery = async () => {
+
     const {
-      data: { messages, message },
-    } = await axios.post('/api/query-data',{
+      data: { messages, message, allDataLength },
+    } = await axios.post('/api/query-data', {
       queryString,
-      queryType
-    }) // TODO: axios.xxx call the right api
-    if (!messages) addErrorMessage(message);
+      queryType,
+      currentIndex,
+      maxInOnePage
+    })
+
+    setQueryDataLength(allDataLength) // TODO: axios.xxx call the right api
+
+    if (!messages) {
+      addErrorMessage(message); setShowDataLength('Data: - / -');
+    }
     else {
       const parsedMessages = JSON.parse(messages);
       let showData = [];
-      parsedMessages.map((e)=>showData.push(`Name: ${e.name}, Subject: ${e.subject}, Score: ${e.score}`))
-      console.log(showData)
+      parsedMessages.map((e) => showData.push(`Name: ${e.name}, Subject: ${e.subject}, Score: ${e.score}`))
       addRegularMessage(...showData);
     }
     setInitialState();
   };
 
   const setInitialState = () => {
-    setQueryString('');
+    // setQueryString('')
     setName('');
     setSubject('');
-  } 
-  
+  }
+
+
+
+  const handleNextPage = async () => {
+    setCurrentIndex(3);
+    console.log(currentIndex)
+    let sendIndex = currentIndex + maxInOnePage
+    console.log('before handleQuery');
+    const {
+      data: { messages, message },
+    } = await axios.post('/api/query-data', {
+      queryString,
+      queryType,
+      currentIndex: sendIndex,
+      maxInOnePage
+    })
+    if (!messages) {
+      addErrorMessage(message); setShowDataLength('Data: - / -');
+    }
+    else {
+      const parsedMessages = JSON.parse(messages);
+      let showData = [];
+      parsedMessages.map((e) => showData.push(`Name: ${e.name}, Subject: ${e.subject}, Score: ${e.score}`))
+      addRegularMessage(...showData);
+    }
+  }
+
+
   return (
     <Wrapper>
       <Row>
@@ -171,6 +232,16 @@ const Body = () => {
           </Typography>
         ))}
       </ContentPaper>
+      <Row>
+        <Button
+          className={classes.button}
+          variant="contained"
+          color="primary"
+          disabled={!canGoToNext}
+          onClick={handleNextPage}
+        >Next</Button>
+        <Typography variant="h5">{showDataLength}</Typography>
+      </Row>
     </Wrapper>
   );
 };

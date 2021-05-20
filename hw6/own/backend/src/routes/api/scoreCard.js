@@ -54,19 +54,29 @@ router.delete('/delete', async (req, res) => {
 });
 
 router.post('/query-data', async (req, res) => {
-  const { queryType, queryString } = req.body;
-  console.log(queryType,queryString);
+  const { queryType, queryString,currentIndex,maxInOnePage } = req.body;
+  console.log(`---currentIndex = ${currentIndex}`);
   const queryCondition = generateQueryCondition(queryType,queryString);
-  console.log(`QueryCondition: ${queryCondition}`);
+  // console.log(`QueryCondition: ${queryCondition}`);
   const notFoundMessage = `${queryType}: ${queryString} not found`;
-  try {
-   
+  try {  
     let queryData = await ScoreCard.find(queryCondition,(error,docs)=>{
       return docs;
-    });
+    }).sort({name:1,subject:1}).exec();
     if (queryData.length !== 0){
-      console.log(`queryData is ${queryData}`)
-      res.status(200).send({messages:JSON.stringify(queryData)});
+      let passData = [];
+      if (queryData.length < currentIndex + maxInOnePage) {
+        for (let i = currentIndex; i < queryData.length ; i++){
+          passData.push(queryData[i]);
+        }
+      } else {
+        for (let i = currentIndex; i < (currentIndex + maxInOnePage) ; i++){
+          passData.push(queryData[i]);
+        }
+      }
+      // let passData = [queryData[currentIndex],queryData[currentIndex+1],queryData[currentIndex+2]];
+      // console.log(`queryData's type is ${passData}`)
+      res.status(200).send({messages:JSON.stringify(passData),allDataLength:queryData.length});
     } else {
       console.log(`not found`)
       res.status(200).send({message:notFoundMessage})

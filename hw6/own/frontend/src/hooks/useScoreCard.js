@@ -24,13 +24,9 @@ const ScoreCardProvider = (props) => {
   };
 
   const addRegularMessage = (...ms) => {
-    
     setMessages([
-      // ...messages,
       ...ms.map((m) => makeMessage(m, REGULAR_MESSAGE_COLOR)),
-      // {message:ms,color:REGULAR_MESSAGE_COLOR}
     ]);
-
   };
 
 
