@@ -1,0 +1,12 @@
+start number=32 2021-05-17-23-23-45
+guess number=Not a legal number 2021-05-17-23-24-09
+guess number=Not a legal number 2021-05-17-23-24-13
+guess number=2 2021-05-17-23-24-15
+guess number=50 2021-05-17-23-24-30
+guess number=25 2021-05-17-23-24-35
+guess number=37 2021-05-17-23-24-38
+guess number=30 2021-05-17-23-24-44
+guess number=33 2021-05-17-23-24-48
+end-game
+guess number=32 2021-05-17-23-24-51
+restart number=6 2021-05-17-23-24-53
