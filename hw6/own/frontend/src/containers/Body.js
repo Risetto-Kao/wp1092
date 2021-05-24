@@ -76,7 +76,7 @@ const Body = () => {
       setShowDataLength(`Data: ${currentIndex + 1}~${currentIndex + maxInOnePage} / ${queryDataLength}`);}
   }, [currentIndex, queryDataLength])
 
-
+  
 
   const handleAdd = async () => {
 
@@ -206,11 +206,26 @@ const Body = () => {
                 control={<Radio color="primary" />}
                 label="Subject"
               />
+               <FormControlLabel
+                value="and"
+                control={<Radio color="primary" />}
+                label="AND"
+              />
+               <FormControlLabel
+                value="or"
+                control={<Radio color="primary" />}
+                label="OR"
+              />
+               <FormControlLabel
+                value="compare"
+                control={<Radio color="primary" />}
+                label="Compare"
+              />
             </RadioGroup>
           </FormControl>
         </StyledFormControl>
         <TextField
-          placeholder="Query string..."
+          placeholder="Query Condition..."
           value={queryString}
           onChange={handleChange(setQueryString)}
           style={{ flex: 1 }}
@@ -225,6 +240,8 @@ const Body = () => {
           Query
         </Button>
       </Row>
+      <Typography variant="h5">And: Name and Subject / Or: Name or Subject / Compare: Score compare</Typography>
+      <Typography variant="h5">{`Qurey format: And,Or -> name,subject`}</Typography>
       <ContentPaper variant="outlined">
         {messages.map((m, i) => (
           <Typography variant="body2" key={m + i} style={{ color: m.color }}>

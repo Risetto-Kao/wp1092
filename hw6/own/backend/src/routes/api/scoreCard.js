@@ -55,14 +55,26 @@ router.delete('/delete', async (req, res) => {
 
 router.post('/query-data', async (req, res) => {
   const { queryType, queryString,currentIndex,maxInOnePage } = req.body;
+  let findString;
+  try {
+    findString = queryString.split(',');
+  } catch(error) {
+    console.log('can NOT split')
+    findString = queryString;
+  }
   console.log(`---currentIndex = ${currentIndex}`);
-  const queryCondition = generateQueryCondition(queryType,queryString);
+  const queryCondition = generateQueryCondition(queryType,findString);
   // console.log(`QueryCondition: ${queryCondition}`);
-  const notFoundMessage = `${queryType}: ${queryString} not found`;
-  try {  
-    let queryData = await ScoreCard.find(queryCondition,(error,docs)=>{
-      return docs;
-    }).sort({name:1,subject:1}).exec();
+  const notFoundMessage = `${queryType}: ${findString} not found`;
+  let qureyData
+  try {
+    if (Array.isArray(queryCondition)){
+    queryData = await ScoreCard.find().or(queryCondition).sort({name:1,subject:1}).exec(); 
+    } else {
+      queryData = await ScoreCard.find(queryCondition,(error,docs)=>{
+        return docs;
+      }).sort({name:1,subject:1}).exec();
+    }
     if (queryData.length !== 0){
       let passData = [];
       if (queryData.length < currentIndex + maxInOnePage) {
@@ -96,7 +108,12 @@ const generateQueryCondition = (queryType, queryString) => {
     case 'subject':
       queryCondition = { subject: queryString };
       break
-
+    case 'and':
+      queryCondition = {name: queryString[0],subject: queryString[1]}
+      break
+    case 'or':
+      queryCondition = [{name: queryString[0]},{subject: queryString[1]}]
+      break
     default:
       console.log('query NOT legal');
       queryCondition = {};

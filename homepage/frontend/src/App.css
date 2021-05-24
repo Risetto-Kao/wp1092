@@ -1,0 +1,16 @@
+.MuiCardHeader-subheader{
+  font-size: x-small !important;
+  color: 'gray'
+}
+
+.MuiCardHeader-title{
+  font-size: medium !important;
+
+}
+
+input{
+  background-color: white !important;
+  border-radius: 5px;
+
+}
+
