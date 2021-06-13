@@ -1,11 +1,11 @@
-import react from 'react';
+import React from 'react';
 import '../App.css';
 import useChatBox from '../hooks/useChatBox';
 import { useState } from "react";
-import { Tabs, Input } from "antd";
+import { Tabs, Input, message } from "antd";
 import ChatModal from '../Components/chatModal';
 import useChat from '../hooks/useChat';
-
+import Message from '../Components/Message';
 const {TabPane} = Tabs;
 const ChatRoomPage = ({userName,displayStatus}) => {
 
@@ -31,7 +31,12 @@ const ChatRoomPage = ({userName,displayStatus}) => {
           }}>
         {chatBoxes.map(({friend,key,chatLog})=>{
           return (
-            <TabPane tab={friend} key={key} closable={true}>{friend}'s ChatBox.</TabPane>
+
+            <TabPane tab={friend} key={key} closable={true}>
+            <p>{friend}'s ChatBox.</p>
+              {chatLog.map((messageInfo,index)=>(<Message messageInfo={messageInfo} key={index} userName={userName}/>))}
+            </TabPane>
+
           );
         })}
       </Tabs>
@@ -68,7 +73,7 @@ const ChatRoomPage = ({userName,displayStatus}) => {
             setMessageInput('');
             return ;
           }
-          sendMessage({key:activeKey,body:msg})
+          sendMessage({key:activeKey,body:msg, name:userName})
           setMessageInput(""); }}
       ></Input.Search> 
   </>

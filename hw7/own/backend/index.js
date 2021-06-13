@@ -96,29 +96,7 @@ const validateChatBox = async (name, participants) => {
     .execPopulate();
 };
 
-// test for populate
-/* if no populate:
-   It would pass user id but not the nested object */
-// (async () => {
-//   const a = await validateUser('a');
-//   const b = await validateUser('b');
 
-//   console.log(a);
-
-//   const cbName = makeName('a', 'b');
-
-//   const chatBox = await validateChatBox(cbName, [a, b]);
-
-//   console.log(chatBox);
-
-//   await chatBox
-//     .populate('users')
-//     .populate({path:'messages',populate:'sender'})
-//     .execPopulate();
-//   console.log('--------')
-//   console.log(chatBox);
-
-// })();
 
 const chatBoxes = {}; // keep track of all open AND active chat boxes
 
@@ -128,7 +106,7 @@ wss.on('connection', function connection(client) {
   client.box = ''; // keep track of client's CURRENT chat box
 
   client.sendEvent = (e) => client.send(JSON.stringify(e));
-
+  // console.log(client)
   client.on('message', async function incoming(message) {
     message = JSON.parse(message);
     // message = {
@@ -136,7 +114,7 @@ wss.on('connection', function connection(client) {
     //   data: {name: xxx, to: xxx, body: xxx, ...} 
     // }
     const { type } = message;
-
+    console.log(type);
     switch (type) {
       // on open chat box
       case 'CHAT': {
@@ -172,12 +150,12 @@ wss.on('connection', function connection(client) {
 
         break;
       }
-
+      // add a message to db
       case 'MESSAGE': {
         const {
           data: { name, to, body },
         } = message;
-
+        console.log(name, to, body);
         const chatBoxName = makeName(name, to);
 
         const sender = await validateUser(name);

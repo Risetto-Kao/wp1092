@@ -2,7 +2,7 @@ import {useState} from 'react';
 
 const useChatBox = (userName,activeKey) =>{
     const [chatBoxes, setChatBoxes] = useState([
-        {friend: 'Mary', key:'MaryChatBox',chatLog:[]},
+        {friend: 'Mary', key:'MaryChatBox',chatLog:[{sender:'Mary',messageBody:'Hi'},{sender:'max',messageBody:'Hello'}]},
         {friend: 'Peter', key:'PeterChatBox',chatLog:[]},
       ]); 
 
