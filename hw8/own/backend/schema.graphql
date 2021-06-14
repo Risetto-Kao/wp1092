@@ -4,7 +4,7 @@ type Query{
 }
 
 type Mutation{
-    createChatBox(userName: String!, friend: String!): ChatBox!
+    createChatBox(data: CreateChatBoxInput!): ChatBox!
     createMessage(data: CreateMessageInput!): Message!
 }
 
@@ -27,6 +27,11 @@ type Message{
 input CreateMessageInput{
     messageBody: String!
     toWhom: String!
+}
+
+input CreateChatBoxInput{
+    userName: String!
+    friend: String!
 }
 
 type User{
