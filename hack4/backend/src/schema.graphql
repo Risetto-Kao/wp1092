@@ -1,7 +1,7 @@
 type Query {
     statsCount(severity:Int, locationKeyWords:[String!]!): [Int]!
 }
-
+     
 
 type Mutation {
     insertPeople(data:[Person!]): Boolean!

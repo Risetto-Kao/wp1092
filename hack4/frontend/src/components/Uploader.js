@@ -2,12 +2,31 @@ import { useState } from 'react';
 import papaparse from 'papaparse';
 
 import "./Uploader.css"
-
-
+import { gql } from '@apollo/client';
+import { useQuery, useMutation } from '@apollo/react-hooks';
 export default function Uploader(props) {
 
+const INSERT_PEOPLE_MUTATIOM = gql`
+    mutation insertPeople(
+        $ssn: ID!
+        $name:String!
+        $severity:Int!
+        $locationName:String!
+        $locationDescription:String!
+    ){
+        insertPeople(
+            data:{
+                ssn: $ssn
+                name:$name
+                severity: $severity
+                locationName:$locationName
+                locationDescription:$locationDescription
+            }
+        )
+    }
+`
     const [rawData, setRawData] = useState([]);
-
+    const [insertPeople] = useMutation(INSERT_PEOPLE_MUTATIOM);
     const tidySubfields = (record) => {
         const subfields = {};
         for(const [key, value] of Object.entries(record)) {
@@ -54,7 +73,9 @@ export default function Uploader(props) {
     const { mutation } = props;
     // TODO 
     // write an onSubmitData that calls the mutation function 
-    const onSubmitData = () => {}
+    const onSubmitData = () => {
+        insertPeople(mutation);
+    }
 
     // DO NOT MODIFY BELOW THIS LINE 
     const headers = rawData.length > 0 ? Object.keys(rawData[0]) : [];

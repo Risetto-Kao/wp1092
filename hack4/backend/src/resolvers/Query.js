@@ -1,6 +1,7 @@
 const Query = {
     statsCount(parent, { severity, locationKeyWords }, { db }, info) {
         try {
+            // if (!locationKeyWords && !severity) return [0,0,0,0,0,0,0,0,0,0,0,0,0,0]
             if (!locationKeyWords) throw new Error(`No locationKeyWords`);
             const queryCount = locationKeyWords.map((keyword)=>{
                 const locationCount = db.people.filter((e)=> e.severity>=severity && e.location.description.includes(keyword));

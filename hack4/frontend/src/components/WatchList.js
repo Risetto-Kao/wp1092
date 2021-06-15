@@ -11,30 +11,10 @@ const STATUS_COUNT_QUERY = gql`
             severity:$severity
             locationKeyWords:$locationKeyWords
         )
-
-        
     }
 `
 
-const INSERT_PEOPLE_MUTATIOM = gql`
-    mutation insertPeople(
-        $ssn: ID!
-        $name:String!
-        $severity:Int!
-        $locationName:String!
-        $locationDescription:String!
-    ){
-        insertPeople(
-            data:{
-                ssn: $ssn
-                name:$name
-                severity: $severity
-                locationName:$locationName
-                locationDescription:$locationDescription
-            }
-        )
-    }
-`
+
 
 export default function WatchList() {
 
@@ -42,15 +22,23 @@ export default function WatchList() {
     // query countStats
     // save the result in a counts variable
   
+    // const { loading, error, data, subscribeToMore } = useQuery(STATUS_COUNT_QUERY);
+
+
     const { loading, error, data, subscribeToMore } = useQuery(STATUS_COUNT_QUERY,{
         variables:{
             severity:1,
             locationKeyWords:constants.watchList
         }
     });
-    const [insertPeople] = useMutation(INSERT_PEOPLE_MUTATIOM);
-    const counts = data;
+
+    console.log(error)
     console.log(data)
+
+
+ 
+    const counts = data;
+
     // TODO
     // use subscription
 
