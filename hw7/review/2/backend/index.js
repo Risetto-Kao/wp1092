@@ -16,18 +16,18 @@ const { Schema } = mongoose;
 
 const userSchema = new Schema({
   name: { type: String, required: true },
-  // chatBoxes: [{ type: mongoose.Types.ObjectId, ref: 'ChatBox' }],
+  chatBoxes: [{ type: mongoose.Types.ObjectId, ref: 'ChatBox' }],
 });
 
 const messageSchema = new Schema({
-  // chatBox: { type: mongoose.Types.ObjectId, ref: 'ChatBox' },
+  chatBox: { type: mongoose.Types.ObjectId, ref: 'ChatBox' },
   sender: { type: mongoose.Types.ObjectId, ref: 'User' },
   body: { type: String, required: true },
 });
 
 const chatBoxSchema = new Schema({
   name: { type: String, required: true },
-  // users: [{ type: mongoose.Types.ObjectId, ref: 'User' }],
+  users: [{ type: mongoose.Types.ObjectId, ref: 'User' }],
   messages: [{ type: mongoose.Types.ObjectId, ref: 'Message' }],
 });
 
@@ -51,7 +51,7 @@ const wss = new WebSocket.Server({
   server,
 });
 
-// app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname, 'public')));
 
 const validateUser = async (name) => {
   const existing = await UserModel.findOne({ name });
@@ -63,7 +63,7 @@ const validateChatBox = async (name, participants) => {
   let box = await ChatBoxModel.findOne({ name });
   if (!box) box = await new ChatBoxModel({ name, users: participants }).save();
   return box
-    // .populate('users')
+    .populate('users')
     .populate({ path: 'messages', populate: 'sender' })
     .execPopulate();
 };
@@ -89,10 +89,13 @@ wss.on('connection', function connection(client) {
 
   client.sendEvent = (e) => client.send(JSON.stringify(e));
 
+  console.log('Connected!')
   client.on('message', async function incoming(message) {
     message = JSON.parse(message);
-    const { type } = message;
 
+    const { type } = message;
+    console.log(type )
+    console.log(message.data)
     switch (type) {
       // on open chat box
       case 'CHAT': {
@@ -101,7 +104,7 @@ wss.on('connection', function connection(client) {
         } = message;
 
         const chatBoxName = makeName(name, to);
-
+        console.log(chatBoxName)
         const sender = await validateUser(name);
         const receiver = await validateUser(to);
         const chatBox = await validateChatBox(chatBoxName, [sender, receiver]);
@@ -135,7 +138,7 @@ wss.on('connection', function connection(client) {
         } = message;
 
         const chatBoxName = makeName(name, to);
-
+        console.log(chatBoxName)
         const sender = await validateUser(name);
         const receiver = await validateUser(to);
         const chatBox = await validateChatBox(chatBoxName, [sender, receiver]);
@@ -147,7 +150,6 @@ wss.on('connection', function connection(client) {
         await chatBox.save();
 
         chatBoxes[chatBoxName].forEach((client) => {
-			console.log(client.box);
           client.sendEvent({
             type: 'MESSAGE',
             data: {

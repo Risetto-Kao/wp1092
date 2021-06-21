@@ -16,24 +16,24 @@ const { Schema } = mongoose;
 
 const userSchema = new Schema({
   name: { type: String, required: true },
-  chatBoxes: [{ type: mongoose.Types.ObjectId, ref: 'ChatBox_hw7' }],
+  chatBoxes: [{ type: mongoose.Types.ObjectId, ref: 'ChatBox' }],
 });
 
 const messageSchema = new Schema({
-  chatBox: { type: mongoose.Types.ObjectId, ref: 'ChatBox_hw7' },
-  sender: { type: mongoose.Types.ObjectId, ref: 'User_hw7' },
+  chatBox: { type: mongoose.Types.ObjectId, ref: 'ChatBox' },
+  sender: { type: mongoose.Types.ObjectId, ref: 'User' },
   body: { type: String, required: true },
 });
 
 const chatBoxSchema = new Schema({
   name: { type: String, required: true },
-  users: [{ type: mongoose.Types.ObjectId, ref: 'User_hw7' }],
-  messages: [{ type: mongoose.Types.ObjectId, ref: 'Message_hw7' }],
+  users: [{ type: mongoose.Types.ObjectId, ref: 'User' }],
+  messages: [{ type: mongoose.Types.ObjectId, ref: 'Message' }],
 });
 
-const UserModel = mongoose.model('User_hw7', userSchema);
-const ChatBoxModel = mongoose.model('ChatBox_hw7', chatBoxSchema);
-const MessageModel = mongoose.model('Message_hw7', messageSchema);
+const UserModel = mongoose.model('User', userSchema);
+const ChatBoxModel = mongoose.model('ChatBox', chatBoxSchema);
+const MessageModel = mongoose.model('Message', messageSchema);
 
 /* -------------------------------------------------------------------------- */
 /*                                  UTILITIES                                 */
@@ -67,19 +67,19 @@ const validateChatBox = async (name, participants) => {
     .populate({ path: 'messages', populate: 'sender' })
     .execPopulate();
 };
-  /*TODO
-  const (async () => {
-   const a = await validateUser('a');
-   const b = await validateUser('b');
 
-   console.log(a);
+// (async () => {
+//   const a = await validateUser('a');
+//   const b = await validateUser('b');
 
-   const cbName = makeName('a', 'b');
+//   console.log(a);
 
-   const chatBox = await validateChatBox(cbName, [a, b]);
+//   const cbName = makeName('a', 'b');
 
-   console.log(chatBox);
- })();*/
+//   const chatBox = await validateChatBox(cbName, [a, b]);
+
+//   console.log(chatBox);
+// })();
 
 const chatBoxes = {}; // keep track of all open AND active chat boxes
 
@@ -91,8 +91,8 @@ wss.on('connection', function connection(client) {
 
   client.on('message', async function incoming(message) {
     message = JSON.parse(message);
-
-    const { type } = message;
+ 
+    const { type } = message;   
 
     switch (type) {
       // on open chat box
@@ -108,18 +108,19 @@ wss.on('connection', function connection(client) {
         const chatBox = await validateChatBox(chatBoxName, [sender, receiver]);
 
         // if client was in a chat box, remove that.
-        if (chatBoxes[client.box])
+       /* if (chatBoxes[client.box])
           // user was in another chat box
-          chatBoxes[client.box].delete(client);
+          chatBoxes[client.box].delete(client);*/
 
         // use set to avoid duplicates
         client.box = chatBoxName;
         if (!chatBoxes[chatBoxName]) chatBoxes[chatBoxName] = new Set(); // make new record for chatbox
         chatBoxes[chatBoxName].add(client); // add this open connection into chat box
-
+        
         client.sendEvent({
           type: 'CHAT',
           data: {
+            to:to,
             messages: chatBox.messages.map(({ sender: { name }, body }) => ({
               name,
               body,
@@ -134,7 +135,7 @@ wss.on('connection', function connection(client) {
         const {
           data: { name, to, body },
         } = message;
-
+        //console.log(name+"->"+to+":"+body)
         const chatBoxName = makeName(name, to);
 
         const sender = await validateUser(name);
@@ -146,11 +147,12 @@ wss.on('connection', function connection(client) {
 
         chatBox.messages.push(newMessage);
         await chatBox.save();
-
         chatBoxes[chatBoxName].forEach((client) => {
           client.sendEvent({
             type: 'MESSAGE',
             data: {
+              key:chatBoxName,
+              to:to,
               message: {
                 name,
                 body,
@@ -163,7 +165,6 @@ wss.on('connection', function connection(client) {
 
     // disconnected
     client.once('close', () => {
-      if(chatBoxes[client.box])
       chatBoxes[client.box].delete(client);
     });
   });

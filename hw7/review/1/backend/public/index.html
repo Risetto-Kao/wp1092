@@ -71,15 +71,11 @@
 
         switch (type) {
           case 'CHAT': {
-            console.log(messages)
             messages = e.data.messages;
-            console.log(messages)
             break;
           }
           case 'MESSAGE': {
-            console.log(messages)
             messages.push(e.data.message);
-            console.log(messages)
             break;
           }
         }

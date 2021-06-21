@@ -1,207 +1,201 @@
-import "../App.css"
-import {useState} from "react";
-import {Tabs, Input} from "antd";
-//ChatModal 中只有一個 modal 不需要如下寫法 會報錯
-//import {ChatModal} from "../Components/ChatModal"
-import ChatModal from "../Components/ChatModal"
-import useChatBox from "../hooks/useChatBox"
-import "../Components/ChatBox.css"
-const {TabPane} = Tabs;
+import "../App.css";
+import { useState, useEffect } from "react";
+import { Tabs, Input, Tag } from "antd";
+import ChatModal from "../Components/ChatModal";
 
+const { TabPane } = Tabs;
+var restoreTab = true;
 
+const ChatRoom = ({me, displayStatus, server}) => {
 
-
-
-//const ChatRoom = ( {me,displayStatus, server,startChat,sendMessage,onEvent } ) => {
-const ChatRoom = ( {me,displayStatus} ) => {
-    const [messageInput, setMessageInput] = useState("");
-    const [modalVisible, setModalVisible] = useState(false); 
-    const [activeKey, setActiveKey] = useState("")
-    const [messages,setMessages] = useState([]); 
-    var count = 0; 
-    const addChatBox = () => { setModalVisible(true); };
-
-
-
-    // equal to `sendMessage = useChat.sendMessage`
-    //const {sendMessage} = useChat();
-    const  {chatBoxes,createChatBox, removeChatBox} = useChatBox(); 
-  
-
-    const seperate_name = (chatboxname,me)=>{
-      let names = chatboxname.split("_");
-      if (names[0] === me)
-        return names[1]
-      else
-        return names[0]
-    }   
-
-    const test = () =>{
-      console.log(messages)
+  const lastChatBoxes=JSON.parse(localStorage.getItem(me));
+  if(restoreTab===true && lastChatBoxes!==null){
+    for(var chatBox of lastChatBoxes){
+      var x=chatBox.split("_");
+      var name=(x[0]===me)?x[1]:x[0];
+      server.sendEvent({
+        type: 'CHAT',
+        data: { to: name, name: me },
+      }); 
     }
+    restoreTab=false;
+  }
 
-    const server = new WebSocket('ws://localhost:8080');
-      server.onopen = () => console.log('Server connected.');
-      // 當伺服器傳來資料時  
-      server.onmessage = (m) => {
-          count += 1
-          console.log(count)
-          onEvent(JSON.parse(m.data));
-      };
-    server.sendEvent = (e) => server.send(JSON.stringify(e));
-    
-    const register = (me) =>{
-      server.sendEvent({
-        type:"REGISTER",
-        data:{name:me}
+  const [chatBoxes, setChatBoxes] = useState([]);
+  const [activeKey, setActiveKey] = useState("");
+  const [messageInput, setMessageInput] = useState("");
+  const [modalVisible, setModalVisible] = useState(false);
+
+  const addChatBox = () => { setModalVisible(true); };
+
+  server.onmessage = (evt) => {
+    var msg = JSON.parse(evt.data);
+    console.log(msg)
+    switch (msg.type) {
+      case 'CHAT': {
+        createChatBox(msg.data.to, msg.data.messages);                
+        break;
       }
-      )
+      case 'MESSAGE': {
+        var key=msg.data.key;
+        var sender=msg.data.message.name;
+        var to=msg.data.to;
+        var body=msg.data.message.body;
+        updateChatBox(key, body, sender, to);
+        break;
+      }
+      default: {}
     }
+  };
 
-    const startChat = (me,to) => {
-      server.sendEvent({
-          type: 'CHAT',
-          data: { to: to, name: me },
-        });
-    };
-  
-    const sendMessage = (me,to,message) => {
-      /* 檢查是否有空輸入
-      if (!inputDOM.value || !nameDOM.value || !toDOM.value) {
-        throw new Error('Empty input!');
-      }
-      */
-      server.sendEvent({
-          type: 'MESSAGE',
-          data: { to: to, name: me, body: message },
-        });
-      };
-
-      const onEvent = (e) => {
-        const { type } = e;
-        switch (type) {
-          case 'CHAT': {
-            let m = e.data.messages;
-            console.log(messages)
-            setMessages(m)
-            console.log(messages)
+  const updateChatBox = (key, body, sender, to) => {
+    const newChatBoxes = [...chatBoxes];
+    for(var ChatBox of newChatBoxes){
+        if(ChatBox.key===key){
+          ChatBox.msg.push({sender:sender, to:to, body:body});
             break;
-          }
-          case 'MESSAGE': {
-           // messages.push(e.data.message);
-            let m = messages
-            m.push(e.data.message)
-            console.log(e.data.message)
-            console.log((messages))
-            //let temp = messages.push(e.data.message)
-            //setMessages(temp)
-             //怪怪得
-            setMessages(m)
-             //setMessages([...messages , e.data.message])
-            console.log(messages)
-            break;
-          }
         }
+    }
+    setChatBoxes(newChatBoxes);  
+  }
+  
+  const createChatBox = (friend, log) => {
+    const newKey = me <= friend ?
+          `${me}_${friend}` : `${friend}_${me}`;
+    if (chatBoxes.some(({ key }) => key === newKey)) {
+      displayStatus({
+        type:"error",
+        msg:friend +"'s ChatBox has already opened.",
+      })
+      return false;
+    }
+    const newChatBoxes = [...chatBoxes];
+    const chatLog = [];
+    for(var m of log){            
+      var sender=m.name;
+      var to=(sender===me)? friend:me;
+      var body=m.body;
+      chatLog.push({sender:sender, to:to, body:body});
+    }
+    newChatBoxes.push({ friend, key: newKey, msg:chatLog });
+    setChatBoxes(newChatBoxes);
+    setActiveKey(newKey);
+  };
 
-        //renderMessages();
+  const removeChatBox = (targetKey) => {
+    let newActiveKey = activeKey;
+    let lastIndex;
+    chatBoxes.forEach(({ key }, i) => {
+      if (key === targetKey) { lastIndex = i - 1; }});
+    const newChatBoxes = chatBoxes.filter(
+      (chatBox) => chatBox.key !== targetKey);
+    if (newChatBoxes.length) {
+      if (newActiveKey === targetKey) {
+        if (lastIndex >= 0) {
+          newActiveKey = newChatBoxes[lastIndex].key;
+        } else { newActiveKey = newChatBoxes[0].key; }
       }
+    } else newActiveKey = ""; // No chatBox left
+    setChatBoxes(newChatBoxes);
+    setActiveKey(newActiveKey);
+  };
 
-      
-    return (
-    <> <div className="App-title"> 
-         <h1>{me}'s Chat Room</h1> </div> 
-      <div className="App-messages"> 
+  const sendMessage = (payload) => {    
+    var users = payload.key.split("_");
+    var to = ( me===users[1] )? users[0]:users[1];
+    var body = payload.body
+    server.sendEvent({
+        type: 'MESSAGE',
+        data: { to: to, name: me, body: body },
+    });
+  };
+
+  useEffect(() => {
+    var chatBoxList=[];
+    for(var chatBox of chatBoxes){
+      chatBoxList.push(chatBox.key);
+    }
+    localStorage.setItem(me, JSON.stringify(chatBoxList));
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  },[chatBoxes]);
+
+  return (
+    <> <div className="App-title">
+         <h1>{me}'s Chat Room</h1> </div>
+      <div className="App-messages">
         <Tabs 
-            type="editable-card" 
-            activeKey={activeKey} 
-            onChange={(key) => { 
-              let to = seperate_name(key);
-              startChat(me,to)
-              console.log("Change")
-              console.log(messages)
-              setActiveKey(key); }}
-            onEdit={(targetKey, action) => {
-             if (action === "add") addChatBox();
-             else if (action === "remove") setActiveKey(removeChatBox(targetKey,activeKey)); 
-              }}
-            > 
+          type="editable-card"
+          activeKey={activeKey}
+          onChange={(key) => { setActiveKey(key); }} 
+          onEdit={(targetKey, action) => {
+            if (action === "add") addChatBox();
+            else if (action === "remove") removeChatBox(targetKey);}}
+        >
           {chatBoxes.map((
-            { friend, key, chatLog }) => {    
-                           return (
-              <TabPane tab={friend} 
-                key={key} closable={true}> 
-                <ul className="Messages-list">
-                {  messages.map((m,key)=>
-                   m.name === me
-                   ?
-                 <li className="Messages-message currentMember" id={key}>
-                   <div className="Message-content">
-                <div className="username">
-                  {m.name}
-                </div>
-                <div className="text">{m.body}</div>
-                </div>
-                 </li>
-                 :                 
-                 <li className="Messages-message">
-                   <div className="Message-content">
-                <div className="username">
-                  {m.name}
-                </div>
-                <div className="text">{m.body}</div>
-                </div>
-                 </li>
-                
-                 )
-                }
-                    </ul>
-              </TabPane>
-          );})}
-       </Tabs>
-        <ChatModal 
-          visible={modalVisible} 
-          onCreate={({ name }) => { 
-            setActiveKey(createChatBox(name,me)); 
-            setModalVisible(false); 
-            startChat(me,name);
-            //console.log("Create")
-            //console.log(messages)
+            { friend, key, msg }) => {  
+              return(              
+                <TabPane tab={friend}                
+                  key={key} closable={true} className="App-message">                
+                  <p  >{friend}'s chatbox.</p>
+                    {msg.map((a,i)=>{
+                      if(a.sender===me)
+                      return(
+                          <p key={i} style={{float: 'right',clear: 'both'}}> 
+                            {a.body+'\u00A0'}                  
+                          <Tag color="blue">{a.sender}</Tag>    
+                          </p>
+                      );
+                      else
+                      return(
+                        <p key={i} style={{float: 'left',clear: 'both'}}>
+                          <Tag color="blue">{a.sender}</Tag>
+                          {'\u00A0'+a.body}
+                        </p>);
+                      }) }           
+                </TabPane>          
+              );})                                              
+        }
+         </Tabs>
+         <ChatModal
+          visible = {modalVisible}
+          onCreate = { ({ name }) => { 
+            server.sendEvent({
+              type: 'CHAT',
+              data: { to: name, name: me },
+            });       
+            setModalVisible(false);
           }}
-          onCancel={() => { 
-            setModalVisible(false); 
+          onCancel={() => {
+            setModalVisible(false);
           }}
-
         />
-      </div>
-      <Input.Search 
-        value={messageInput} 
-        onChange={(e) => 
-          setMessageInput(e.target.value)} 
-        enterButton="Send" 
-        placeholder=
-          "Enter message here..." 
-        onSearch={(msg) => {
-          if (!msg) {
-            displayStatus({
-              type: "error",
-              msg: "Please enter message.", 
-            });
-            return;
-          } else if (activeKey === "") { 
-            displayStatus({
-              type: "error",
-              msg: "Please add a chatbox first.", 
-            });
+
+        </div>
+        <Input.Search
+          value={messageInput}
+          onChange={(e) => 
+            setMessageInput(e.target.value)}
+          enterButton="Send"
+          placeholder="Enter message here..."
+          onSearch={(msg) => {
+            if (!msg) {
+              displayStatus({
+                type: "error",
+                msg: "Please enter message.",
+              });
+              return;
+            } else if (activeKey === "") {
+              displayStatus({
+                type: "error",
+                msg: "Please add a chatbox first.",
+              });
+              setMessageInput("");
+              return;
+            }
+            sendMessage({ key: activeKey, body: msg });
             setMessageInput("");
-            return;
-          }
-          let to = seperate_name(activeKey,me);
-          //sendMessage({ key: activeKey, body: msg }); 
-          sendMessage(me, to, msg)
-          setMessageInput("");
-        }}
-      ></Input.Search>
-      <button onClick={test}/>
-  </>);
-};
-export default ChatRoom;
+          }}
+        ></Input.Search> 
+    </>);
+  };
+  export default ChatRoom;
