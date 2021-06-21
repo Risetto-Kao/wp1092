@@ -11,6 +11,7 @@ const messageSchema = new Schema({
   // chatBox: { type: mongoose.Types.ObjectId, ref: 'ChatBox' },
   sender: { type: mongoose.Types.ObjectId, ref: 'User' },
   messageBody: { type: String, required: true },
+  reciever: { type: mongoose.Types.ObjectId, ref: 'User' }
 });
 
 const chatBoxSchema = new Schema({

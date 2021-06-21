@@ -1,5 +1,4 @@
 
-// i use mongodb://localhost:27017/cardmongo for MONGO_URL
 import mongoose from 'mongoose';
 import dotenv from 'dotenv-defaults';
 import { UserModel, ChatBoxModel, MessageModel } from './db.js';

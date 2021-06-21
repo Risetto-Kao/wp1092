@@ -6,6 +6,7 @@ type Query{
 type Mutation{
     createChatBox(data: CreateChatBoxInput!): ChatBox!
     createMessage(data: CreateMessageInput!): Message!
+    createUser(data: CreateUserInput!): User!
 }
 
 # type Subscription{
@@ -19,19 +20,25 @@ type ChatBox{
 }
 
 type Message{
-    body:String!
+    messageBody:String!
     id:ID!
     chatBoxName: String!
 }
 
 input CreateMessageInput{
     messageBody: String!
-    toWhom: String!
+    sender: String!
+    receiver: String!
 }
 
 input CreateChatBoxInput{
     userName: String!
     friend: String!
+}
+
+input CreateUserInput{
+    userName:String!
+    id:ID!
 }
 
 type User{
